@@ -1,0 +1,20 @@
+{
+  "name": "clients-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "NODE_PATH=./ node index.js",
+    "start": "npm run serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "cors": "^2.8.1",
+    "express": "^4.14.1",
+    "mysql": "^2.13.0",
+    "sequelize": "^3.30.1"
+  }
+}

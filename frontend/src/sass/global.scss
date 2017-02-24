@@ -1,0 +1,56 @@
+// containg global styles
+
+body {
+  font-family: 'Lato';
+}
+
+// Change the background-color if the viewport is 480 pixels wide or wider
+.container {
+  // border: 1px solid;
+  width: 80%;
+  margin: 0 auto;
+}
+
+@media only screen and (max-width: 768px) {
+  // When the width of this document is less than 768 pixels, apply this styles
+  .container {
+    width: 100%;
+  }
+}
+
+button {
+  border: 1px solid #d3d3d3;
+  background: white;
+  color: #666;
+  border-radius: 0.3em;
+  padding: 0.4em 1em;
+  height: 2.7em;
+}
+
+button:disabled {
+    background: #dddddd;
+}
+
+input {
+  border-radius: .25em;
+  width: 100%;
+  padding: .25em .4em;
+  margin: .1em;
+  font-size: 1rem;
+  line-height: 1.25;
+  border: 1px solid rgba(0,0,0,.15);
+}
+
+.truncate-text {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.error-message {
+  color: color(danger)
+}

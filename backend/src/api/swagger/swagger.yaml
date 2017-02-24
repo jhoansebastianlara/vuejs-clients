@@ -1,0 +1,283 @@
+# Clients specification
+swagger: '2.0'
+info:
+  title: Clients API
+  version: "1.0.0"
+# the domain of the service
+host: localhost:3000
+# schemes supported
+schemes:
+  - http
+basePath: /api
+produces:
+  - application/json
+paths:
+  /clients:
+    get:
+      summary: Clients and providers
+      description: |
+        The Clients endpoint returns information about the stored clients and
+        their relationships with providers.
+      parameters:
+        - name: id
+          in: query
+          description: Client identificator.
+          required: false
+          type: integer
+        - name: name
+          in: query
+          description: Name or part of name to search on clients' names.
+          required: false
+          type: string
+        - name: email
+          in: query
+          description: Email or part of email to search on clients' eamil field.
+          required: false
+          type: string
+        - name: phone
+          in: query
+          description: Phone or part of phone to search on clients' phone field.
+          required: false
+          type: string
+        - name: sortField
+          in: query
+          description: Field name to order clients list when querying.
+          required: false
+          type: string
+        - name: sortType
+          in: query
+          description: ASC or DESC to order using sortField, defaults to ASC.
+          required: false
+          type: string
+      tags:
+        - Clients
+        - Providers
+      responses:
+        200:
+          description: An object with an array of clients, and an array of providers.
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/GetClientResponse'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Save a client.
+      description: |
+        Endpoint that creates a client. If you want to relate it with
+        providers,send ids in an array `providers`.
+      consumes:
+        - application/x-www-form-urlencoded
+        - application/json
+      parameters:
+        - name: client
+          in: body
+          description: The client JSON you want to save
+          schema:
+            allOf:
+              - $ref: '#/definitions/Client'
+              - type: object
+                properties:
+                  providers:
+                    type: array
+                    description: An array of providers ids.
+                    items:
+                      type: integer
+          required: true
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An object with created client info.
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /clients/{id}:
+    put:
+      summary: Update info for a client.
+      description: |
+        Updates a client. If you want to relate it with providers, send ids
+        in an array `providers` or empty array `[]` for no relationships.
+      consumes:
+        - application/x-www-form-urlencoded
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Client ID to update
+          required: true
+          type: string
+        - name: client
+          in: body
+          description: The client JSON you want to update
+          schema:
+            allOf:
+              - $ref: '#/definitions/Client'
+              - type: object
+                properties:
+                  providers:
+                    type: array
+                    description: An array of providers ids.
+                    items:
+                      type: integer
+          required: false
+      tags:
+        - Clients
+      responses:
+        200:
+          description: Object updated.
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete a client
+      parameters:
+        - name: id
+          in: path
+          description: Client ID to delete
+          required: true
+          type: string
+      tags:
+        - Clients
+      responses:
+        200:
+          description: Object deleted.
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: Get a specific client
+      parameters:
+        - name: id
+          in: path
+          description: Client ID to get information
+          required: true
+          type: string
+      tags:
+        - Clients
+      responses:
+        200:
+          description: Object deleted.
+          schema:
+            $ref: '#/definitions/Client'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /providers:
+    post:
+      summary: Save a provider.
+      consumes:
+        - application/x-www-form-urlencoded
+        - application/json
+      parameters:
+        - name: name
+          in: body
+          description: The provider name you want to save
+          schema:
+            type: string
+          required: true
+      tags:
+        - Providers
+      responses:
+        200:
+          description: An object with created provider info.
+          schema:
+            $ref: '#/definitions/Provider'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /providers/{id}:
+    put:
+      summary: Update info for a provider.
+      consumes:
+        - application/x-www-form-urlencoded
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Provider ID to update
+          required: true
+          type: string
+        - name: name
+          in: body
+          description: The provider name you want to update
+          schema:
+            type: string
+          required: true
+      tags:
+        - Providers
+      responses:
+        200:
+          description: Object updated.
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete a provider
+      parameters:
+        - name: id
+          in: path
+          description: Provider ID to delete
+          required: true
+          type: string
+      tags:
+        - Providers
+      responses:
+        200:
+          description: Object deleted.
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Client:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the client.
+      email:
+        type: string
+        description: Email address of the client.
+      phone:
+        type: string
+        description: Phone number of the client.
+  Provider:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier for the provider.
+      name:
+        type: string
+        description: Name of the provider.
+  GetClientResponse:
+    type: object
+    properties:
+      clients:
+        type: array
+        items:
+          $ref: '#/definitions/Client'
+      providers:
+        type: array
+        items:
+          $ref: '#/definitions/Provider'
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
