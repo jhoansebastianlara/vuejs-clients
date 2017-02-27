@@ -4,7 +4,7 @@
       <div class="modal-wrapper row">
         <div class="modal-container col-xs-10 col-sm-8 col-md-6">
           <div class="modal-header">
-            <h4>New Client</h4>
+            <h4>{{ modalTitle }}</h4>
           </div>
           <div class="modal-body">
             <form>
@@ -96,6 +96,9 @@
       buttonSaveTitle() {
         return this.loading ? 'Saving...' : (this.clientId ? 'Edit Client' : 'Add Client')
       },
+      modalTitle() {
+        return this.clientId ? 'Edit Client' : 'New Client'
+      },
       // it checks if all required inputs in the form are filled and valid
       isFormValid() {
         let inputsFilled = this.name != '' && this.email != '' && this.phone != ''
@@ -129,6 +132,9 @@
             this.$emit('close')
           })
         }
+      },
+      closeModal() {
+        this.$emit('close')
       }
     },
     components: {
@@ -212,7 +218,7 @@
     align-items: center;
     height: 2.5em;
     border-bottom: 1px solid lightgray;
-    padding: 0 .5em;
+    padding: 0 1em;
 
     h4 {
       margin: 0;

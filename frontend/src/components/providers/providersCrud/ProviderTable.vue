@@ -2,10 +2,6 @@
   <div class="row">
     <div class="col-xs-offset-3 col-xs-9 col-sm-offset-3 col-sm-6 no-padding-right">
       <div class="providers-container" v-if="providers.length > 0">
-        <!-- <provider-table-item
-          v-for="provider in providers"
-          :provider="provider"
-          @providerDeleted="providerDeleted"></provider-table-item> -->
           <div class="row item" v-for="provider in providers">
             <div class="col-xs-1 no-padding">
               <input type="checkbox"
@@ -35,7 +31,6 @@
   import { mapActions } from 'vuex'
   import * as types from '../../../store/types'
   import { eventBus } from '../../../main'
-  import ProviderTableItem from './ProviderTableItem.vue'
 
   export default {
     data() {
@@ -65,13 +60,7 @@
         if (confirm('Are you sure you want to delete thi provider')) {
           this.deleteProvider(provider)
         }
-      },
-      // providerToggle(provider, event) {
-      //   eventBus.$emit('providerToggle', provider, event.target.checked)
-      // }
-    },
-    components: {
-      ProviderTableItem
+      }
     },
     created() {
       eventBus.$on('updateSelectedProviders', (providers) => {
