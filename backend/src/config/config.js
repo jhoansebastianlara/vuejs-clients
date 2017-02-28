@@ -1,5 +1,5 @@
 module.exports = {
   database: {
-    url: "mysql://root:12345@localhost:3306/clients"
+    url: "mysql://root@localhost:3306/DB_CLIENTS"
   }
 }

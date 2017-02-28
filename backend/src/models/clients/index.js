@@ -25,10 +25,10 @@ module.exports = (sequelize, DataTypes) => {
         Client.belongsToMany(models.Provider, {
           through: 'client_provider',
           foreignKey: 'client_id'
-        });
+        })
       }
     }
-  });
+  })
 
-  return Client;
-};
+  return Client
+}

@@ -1,5 +1,5 @@
-const models = require('src/models');
-const constants = require('src/shared/constants');
+const models = require('src/models')
+const constants = require('src/shared/constants')
 
 module.exports = {
 
@@ -25,15 +25,15 @@ module.exports = {
         }).then((providers) => {
           client.setProviders(providers).then(() => {
             // Saved providers
-            callback(null, client);
-          });
-        });
+            callback(null, client)
+          })
+        })
       } else {
-        callback(null, client);
+        callback(null, client)
       }
     }).catch((err) => {
-      callback(err);
-    });
+      callback(err)
+    })
   },
 
   /**
@@ -59,7 +59,7 @@ module.exports = {
       where: {},
       // Default sort to id and ASC
       order: [[query.sortField ? query.sortField : 'id', query.sortType == 'DESC' ? query.sortType : 'ASC']]
-    };
+    }
 
     if (query.id) {
       queryParams.where.id = query.id
@@ -68,37 +68,37 @@ module.exports = {
     if (query.name) {
       queryParams.where.name = {
         $like: '%' + query.name + '%'
-      };
+      }
     }
     // If email in query, use like for filtering
     if (query.email) {
       queryParams.where.email = {
         $like: '%' + query.email + '%'
-      };
+      }
     }
     // If phone in query, use like for filtering
     if (query.phone) {
       queryParams.where.phone = {
         $like: '%' + query.phone + '%'
-      };
+      }
     }
 
     models.Client.findAll(queryParams).then((clients) => {
       let response = {
         clients: JSON.parse(JSON.stringify(clients))
-      };
+      }
 
       models.Provider.findAll().then((providers) => {
-        response.providers = JSON.parse(JSON.stringify(providers));
-        callback(null, response);
+        response.providers = JSON.parse(JSON.stringify(providers))
+        callback(null, response)
       }).catch((err) => {
-        console.log(err);
-        callback(err);
+        console.log(err)
+        callback(err)
       })
     }).catch((err) => {
-      console.log(err);
-      callback(err);
-    });
+      console.log(err)
+      callback(err)
+    })
   },
 
   /**
@@ -116,13 +116,13 @@ module.exports = {
     }).then((client) => {
       let response = {
         client: JSON.parse(JSON.stringify(client))
-      };
+      }
 
-      callback(null, response);
+      callback(null, response)
     }).catch((err) => {
-      console.log(err);
-      callback(err);
-    });
+      console.log(err)
+      callback(err)
+    })
   },
 
   /**
@@ -149,10 +149,10 @@ module.exports = {
         id: clientData.id
       }
     }).then((updated) => {
-      callback(null, updated);
+      callback(null, updated)
     }).catch((err) => {
-      callback(err);
-    });
+      callback(err)
+    })
   },
 
   /**
@@ -174,18 +174,18 @@ module.exports = {
         }).then((providers) => {
           client.setProviders(providers).then(() => {
             // Saved providers
-            callback(null, [1]);
-          });
-        });
+            callback(null, [1])
+          })
+        })
       } else {
         callback(null, {
           code: constants.HTTP_STATUS.NOT_FOUND,
           desc: 'Client not found'
-        });
+        })
       }
     }).catch((err) => {
-      callback(err);
-    });
+      callback(err)
+    })
   },
 
   /**
@@ -199,9 +199,9 @@ module.exports = {
         id: id
       }
     }).then((client) => {
-      callback(null, client);
+      callback(null, client)
     }).catch((err) => {
-      callback(err);
-    });
+      callback(err)
+    })
   }
-};
+}

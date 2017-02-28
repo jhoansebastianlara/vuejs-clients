@@ -31,7 +31,7 @@ paths:
           type: string
         - name: email
           in: query
-          description: Email or part of email to search on clients' eamil field.
+          description: Email or part of email to search on clients' email field.
           required: false
           type: string
         - name: phone
@@ -67,7 +67,7 @@ paths:
       summary: Save a client.
       description: |
         Endpoint that creates a client. If you want to relate it with
-        providers,send ids in an array `providers`.
+        providers, send ids in an array `providers`.
       consumes:
         - application/x-www-form-urlencoded
         - application/json
@@ -89,7 +89,7 @@ paths:
       tags:
         - Clients
       responses:
-        200:
+        201:
           description: An object with created client info.
         default:
           description: Unexpected error

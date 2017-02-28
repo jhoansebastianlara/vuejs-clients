@@ -1,4 +1,4 @@
-const models = require('src/models');
+const models = require('src/models')
 
 module.exports = {
 
@@ -7,10 +7,10 @@ module.exports = {
     models.Provider.create({
       name: providerData.name
     }).then((provider) => {
-      callback(null, provider);
+      callback(null, provider)
     }).catch((err) => {
-      callback(err);
-    });
+      callback(err)
+    })
   },
 
   // Function that gets all providers
@@ -18,13 +18,13 @@ module.exports = {
     models.Provider.findAll().then((providers) => {
       let response = {
         providers: JSON.parse(JSON.stringify(providers))
-      };
+      }
 
-      callback(null, response);
+      callback(null, response)
     }).catch((err) => {
-      console.log(err);
-      callback(err);
-    });
+      console.log(err)
+      callback(err)
+    })
   },
 
   // Function that gets a specific provider
@@ -32,13 +32,13 @@ module.exports = {
     models.Provider.findById(id).then((provider) => {
       let response = {
         provider: JSON.parse(JSON.stringify(provider))
-      };
+      }
 
-      callback(null, response);
+      callback(null, response)
     }).catch((err) => {
-      console.log(err);
-      callback(err);
-    });
+      console.log(err)
+      callback(err)
+    })
   },
 
   // Function that updates a provider
@@ -50,10 +50,10 @@ module.exports = {
         id: providerData.id
       }
     }).then((updated) => {
-      callback(null, updated);
+      callback(null, updated)
     }).catch((err) => {
-      callback(err);
-    });
+      callback(err)
+    })
   },
 
   // Function that deletes a provider
@@ -63,9 +63,9 @@ module.exports = {
         id: id
       }
     }).then((provider) => {
-      callback(null, provider);
+      callback(null, provider)
     }).catch((err) => {
-      callback(err);
-    });
+      callback(err)
+    })
   }
-};
+}
