@@ -1,7 +1,7 @@
 const models = require('src/models')
 const constants = require('src/shared/constants')
 
-module.exports = {
+var Client = {
 
   /**
   * Function that creates a client
@@ -143,16 +143,75 @@ module.exports = {
       update.phone = clientData.phone
     }
 
-    // Send to update info in database
-    models.Client.update(update, {
-      where: {
-        id: clientData.id
+    models.Client.findById(clientData.id).then((client) => {
+      // Send to update info in database
+      if (client) {
+        // Client exists, it can be updated
+        models.Client.update(update, {
+          where: {
+            id: clientData.id
+          }
+        }).then((updated) => {
+          console.log('resp updated:')
+          console.log(updated)
+          console.log('providers?')
+          console.log(clientData.providers)
+          // update providers, if necessary
+          if (clientData.providers && clientData.providers.length) {
+            console.log('update providers please')
+            // Find providers to assign them to the client
+            models.Provider.findAll({
+              where: {
+                id: { $in: clientData.providers }
+              }
+            }).then((providers) => {
+              client.setProviders(providers).then((resp) => {
+                // Saved providers
+                console.log('providers updated')
+                callback(null, true)
+              })
+            }).catch((err) => {
+              callback(err)
+            })
+          } else {
+            console.log('no providers to update')
+            callback(null, true)
+          }
+        }).catch((err) => {
+          callback(err)
+        })
+      } else {
+        callback(null, {notFound: true})
       }
-    }).then((updated) => {
-      callback(null, updated)
     }).catch((err) => {
       callback(err)
     })
+
+
+
+
+
+    // first of all, Check if the client exists
+    // Client.findById(clientData.id, (err, data) => {
+    //   if (err) {
+    //     return callback(err)
+    //   }
+    //
+    //   if (data.client) {
+    //     // Client exists, it can be updated
+    //     models.Client.update(update, {
+    //       where: {
+    //         id: clientData.id
+    //       }
+    //     }).then((updated) => {
+    //       callback(null, true)
+    //     }).catch((err) => {
+    //       callback(err)
+    //     })
+    //   } else {
+    //     callback(null, {notFound: true})
+    //   }
+    // })
   },
 
   /**
@@ -194,14 +253,28 @@ module.exports = {
   * @param callback(err, deleted)
   */
   delete: (id, callback) => {
-    models.Client.destroy({
-      where: {
-        id: id
+    // first of all, Check if the client exists
+    Client.findById(id, (err, data) => {
+      if (err) {
+        return callback(err)
       }
-    }).then((client) => {
-      callback(null, client)
-    }).catch((err) => {
-      callback(err)
+
+      if (data.client) {
+        // Client exists, it can be removed
+        models.Client.destroy({
+          where: {
+            id: id
+          }
+        }).then((client) => {
+          callback(null, client)
+        }).catch((err) => {
+          callback(err)
+        })
+      } else {
+        callback(null, {notFound: true})
+      }
     })
   }
 }
+
+module.exports = Client

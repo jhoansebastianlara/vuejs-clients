@@ -1,4 +1,3 @@
-import providers from '../../data/providers'
 import * as types from '../types'
 
 const state = {
@@ -40,16 +39,6 @@ const mutations = {
 }
 
 const actions = {
-  // get current providers from the server
-  [types.SET_PROVIDERS]: ({commit}) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        commit(types.MUTATE_SET_PROVIDERS, providers)
-        resolve()
-      }, 1000)
-    })
-  },
-
   [types.ADD_PROVIDER]: ({commit, state}, providerName) => {
     let provider = {
       id: state.providers.length,

@@ -32,13 +32,16 @@ router.get('/', (req, res) => {
 */
 router.post('/', (req, res) => {
   let body = req.body
-
+  let providers = body['providers[]']
+  console.log(body)
   let clientData = {
     name: body.name,
     email: body.email,
     phone: body.phone,
-    providers: body.providers ? (body.providers.length ? body.providers : [body.providers]) : []
+    providers: providers && Array.isArray(providers) ? providers : [providers],
   }
+  console.log('clientData:')
+  console.log(clientData)
 
   // Validate fields required
   let allFieldsOK = clientData.name && clientData.email && clientData.phone
@@ -65,42 +68,38 @@ router.post('/', (req, res) => {
 */
 router.put('/:id', (req, res) => {
   let body = req.body
+  let providers = body['providers[]']
 
   let clientData = {
     name: body.name,
     email: body.email,
     phone: body.phone,
+    providers: providers && Array.isArray(providers) ? providers : [providers],
     id: req.params.id
   }
+
+  console.log('clientData')
+  console.log(clientData)
 
   // Validate fields required
   let allFieldsOK = clientData.id && (clientData.name || clientData.email || clientData.phone)
 
   if (allFieldsOK) {
-    // Checks if the client exists
-    Client.findById(clientData.id, (err, data) => {
+    Client.update(clientData, (err, data) => {
       if (err) {
         return res.status(constants.HTTP_STATUS.INTERNAL_ERROR).json({
           error: constants.ERROR_CODES.INTERNAL_ERROR
         })
       }
 
-      if (data.client) {
-        // exists!
-        Client.update(clientData, (err, updated) => {
-          if (err) {
-            return res.status(constants.HTTP_STATUS.INTERNAL_ERROR).json({
-              error: constants.ERROR_CODES.INTERNAL_ERROR
-            })
-          }
-
-          res.json(updated)
-        })
-      } else {
+      // check if the client was found
+      if (data.notFound) {
         return res.status(constants.HTTP_STATUS.NOT_FOUND).json({
           error: constants.ERROR_CODES.NOT_FOUND
         })
       }
+
+      res.json(data)
     })
   } else if (body.providers) {
     // Update providers related with client
@@ -125,7 +124,7 @@ router.put('/:id', (req, res) => {
 * Delete a client
 */
 router.delete('/:id', (req, res) => {
-  Client.delete(req.params.id, (err, deleted) => {
+  Client.delete(req.params.id, (err, data) => {
     // if (err) return res.status(constants.HTTP_STATUS.INTERNAL_ERROR).json(err)
     if (err) {
       return res.status(constants.HTTP_STATUS.INTERNAL_ERROR).json({
@@ -133,7 +132,14 @@ router.delete('/:id', (req, res) => {
       })
     }
 
-    res.json(deleted)
+    // check if the client was found
+    if (data.notFound) {
+      return res.status(constants.HTTP_STATUS.NOT_FOUND).json({
+        error: constants.ERROR_CODES.NOT_FOUND
+      })
+    }
+
+    res.json(data)
   })
 })
 
@@ -141,14 +147,20 @@ router.delete('/:id', (req, res) => {
 * Get a specific client
 */
 router.get('/:id', (req, res) => {
-  Client.findById(req.params.id, (err, client) => {
+  Client.findById(req.params.id, (err, data) => {
     if (err) {
       return res.status(constants.HTTP_STATUS.INTERNAL_ERROR).json({
         error: constants.ERROR_CODES.INTERNAL_ERROR
       })
     }
 
-    res.json(client)
+    if (!data.client) {
+      return res.status(constants.HTTP_STATUS.NOT_FOUND).json({
+        error: constants.ERROR_CODES.NOT_FOUND
+      })
+    }
+
+    res.json(data)
   })
 })
 

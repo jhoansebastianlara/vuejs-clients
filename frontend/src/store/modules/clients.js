@@ -1,5 +1,6 @@
-import clients from '../../data/clients'
 import * as types from '../types'
+import { ENDPOINTS, HTTP_STATUS, ERROR_CODES }  from '../../constants'
+import Vue from 'vue'
 
 const state = {
   clients: []
@@ -40,42 +41,133 @@ const mutations = {
 }
 
 const actions = {
-  [types.SET_CLIENTS]: ({commit}) => {
+  [types.SET_CLIENTS_AND_PROVIDERS]: ({commit}) => {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        commit(types.MUTATE_SET_CLIENTS, clients)
-        resolve()
-      }, 1000)
+      // GET /clients
+      Vue.http.get(ENDPOINTS.CLIENTS.ROOT)
+        .then(response => {
+          // validate the response status code is ok
+          if (response.status == HTTP_STATUS.OK) {
+            let data = response.body
+
+            if (data.clients) {
+              commit(types.MUTATE_SET_CLIENTS, data.clients)
+            }
+
+            if (data.providers) {
+              commit(types.MUTATE_SET_PROVIDERS, data.providers)
+            }
+
+            resolve({success: true})
+          } else {
+            resolve({
+              success: false,
+              error: ERROR_CODES.INTERNAL_ERROR
+            })
+          }
+        }, response => {
+          // error callback
+          reject({
+            success: false,
+            error: ERROR_CODES.INTERNAL_ERROR
+          })
+        })
     })
   },
 
   [types.ADD_CLIENT]: ({commit, state}, client) => {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        client.id = state.clients.length
-        commit(types.MUTATE_ADD_CLIENT, client)
-        resolve()
-      }, 1000)
+      // POST /clients
+      Vue.http.post(ENDPOINTS.CLIENTS.ROOT, client)
+        .then(response => {
+          console.log('response done')
+          let newClient = response.body
+          // validate if the resource was created
+          if (response.status == HTTP_STATUS.CREATED && newClient.id) {
+            if (client.providers) {
+              // The providers array is transformed to the expected format
+              newClient.providers = client.providers.map(providerId => {return {id: providerId}})
+            }
+            commit(types.MUTATE_ADD_CLIENT, newClient)
+            resolve({
+              success: true,
+              data: {
+                client: newClient
+              }
+            })
+          } else {
+            resolve({
+              success: false,
+              error: ERROR_CODES.INTERNAL_ERROR
+            })
+          }
+        }, response => {
+          // error callback
+          reject({
+            success: false,
+            error: response.body && response.body.error ? response.body.error.code : ERROR_CODES.INTERNAL_ERROR
+          })
+        })
     })
   },
 
   [types.UPDATE_CLIENT]: ({commit}, client) => {
-    console.log('update client please')
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        commit(types.MUTATE_UPDATE_CLIENT, client)
-        resolve()
-      }, 1000)
+      // PUT /clients
+      Vue.http.put(ENDPOINTS.CLIENTS.DETAIL.replace(':id', client.id), client)
+        .then(response => {
+          let success = response.body
+
+          if (response.status == HTTP_STATUS.OK && success) {
+            if (client.providers) {
+              // The providers array is transformed to the expected format
+              client.providers = client.providers.map(providerId => {return {id: providerId}})
+            }
+            commit(types.MUTATE_UPDATE_CLIENT, client)
+            resolve({
+              success: true
+            })
+          } else {
+            resolve({
+              success: false,
+              error: ERROR_CODES.INTERNAL_ERROR
+            })
+          }
+        }, response => {
+          // error callback
+          reject({
+            success: false,
+            error: response.body && response.body.error ? response.body.error.code : ERROR_CODES.INTERNAL_ERROR
+          })
+        })
     })
   },
 
   [types.DELETE_CLIENT]: ({commit}, clientId) => {
-    console.log('[types.DELETE_CLIENT]', clientId)
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        commit(types.MUTATE_DELETE_CLIENT, clientId)
-        resolve()
-      }, 1000)
+      // DELETE /clients
+      Vue.http.delete(ENDPOINTS.CLIENTS.DETAIL.replace(':id', clientId))
+        .then(response => {
+          let success = response.body
+
+          if (response.status == HTTP_STATUS.OK && success) {
+            commit(types.MUTATE_DELETE_CLIENT, clientId)
+            resolve({
+              success: true
+            })
+          } else {
+            resolve({
+              success: false,
+              error: ERROR_CODES.INTERNAL_ERROR
+            })
+          }
+        }, response => {
+          // error callback
+          reject({
+            success: false,
+            error: response.body && response.body.error ? response.body.error.code : ERROR_CODES.INTERNAL_ERROR
+          })
+        })
     })
   }
 }

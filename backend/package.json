@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "serve": "NODE_PATH=./ node index.js",
+    "serve-d": "NODE_PATH=./ node --debug index.js",
     "start": "npm run serve",
+    "start-d": "npm run serve-d",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

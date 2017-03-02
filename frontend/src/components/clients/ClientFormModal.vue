@@ -122,12 +122,20 @@
 
         // It is verified if the client must be updated or created
         if (this.clientId) {
-          this.updateClient(client).then((data) => {
+          this.updateClient(client).then((response) => {
+            if (!response.success) {
+              alert('Something was wrong')
+            }
+
             this.loading = false
             this.$emit('close')
           })
         } else {
-          this.addClient(client).then((data) => {
+          this.addClient(client).then((response) => {
+            if (!response.success) {
+              alert('Something was wrong')
+            }
+
             this.loading = false
             this.$emit('close')
           })
@@ -149,7 +157,9 @@
         this.name = this.client.name
         this.email = this.client.email
         this.phone = this.client.phone
-        this.providers = Array.isArray(this.client.providers) ? this.client.providers : []
+        if (this.client.providers && Array.isArray(this.client.providers)) {
+          this.providers = this.client.providers.map(provider => {return provider.id})
+        }
 
         if (Array.isArray(this.providers) && this.providers.length > 0) {
           eventBus.$emit('updateSelectedProviders', this.providers)

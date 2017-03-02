@@ -57,7 +57,7 @@
         eventBus.$emit('startUpdateProvider', provider)
       },
       onDeleteProvider(provider) {
-        if (confirm('Are you sure you want to delete thi provider')) {
+        if (confirm('Are you sure you want to delete this provider?')) {
           this.deleteProvider(provider)
         }
       }
