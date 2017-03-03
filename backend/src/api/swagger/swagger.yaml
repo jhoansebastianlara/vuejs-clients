@@ -46,7 +46,7 @@ paths:
           type: string
         - name: sortType
           in: query
-          description: ASC or DESC to order using sortField, defaults to ASC.
+          description: ASC or DESC to order using sortField, by default order DESC.
           required: false
           type: string
       tags:

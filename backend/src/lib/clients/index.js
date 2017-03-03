@@ -57,8 +57,8 @@ var Client = {
         through: { attributes: [] }
       }],
       where: {},
-      // Default sort to id and ASC
-      order: [[query.sortField ? query.sortField : 'id', query.sortType == 'DESC' ? query.sortType : 'ASC']]
+      // Default sort by id and DESC
+      order: [[query.sortField ? query.sortField : 'id', query.sortType == 'ASC' ? query.sortType : 'DESC']]
     }
 
     if (query.id) {

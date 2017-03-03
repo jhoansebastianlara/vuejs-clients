@@ -69,6 +69,7 @@
 
 <script>
   import * as types from '../../store/types'
+  import { ERROR_CODES }  from '../../constants'
   import { eventBus } from '../../main'
   import { appMixin } from '../../mixins'
   import { mapActions } from 'vuex'
@@ -124,20 +125,24 @@
         if (this.clientId) {
           this.updateClient(client).then((response) => {
             if (!response.success) {
-              alert('Something was wrong')
+              alert('Error, the client couldn\'t be updated')
             }
 
             this.loading = false
             this.$emit('close')
+          }, (responseError) => {
+            alert('Error, the client couldn\'t be updated')
           })
         } else {
           this.addClient(client).then((response) => {
             if (!response.success) {
-              alert('Something was wrong')
+              alert('Error, the client couldn\'t be added')
             }
 
             this.loading = false
             this.$emit('close')
+          }, (responseError) => {
+            alert('Error, the client couldn\'t be added')
           })
         }
       },

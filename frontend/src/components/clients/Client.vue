@@ -47,6 +47,13 @@
         console.log('clientDeleted')
         if (confirm('Are you sure you want to delete this client?')) {
           this.deleteClient(this.client.id)
+            .then(response => {
+              if (!response.success) {
+                alert('Error, the client couldn\'t be removed')
+              }
+            }, (responseError) => {
+              alert('Error, the client couldn\'t be removed')
+            })
         }
       }
     }
