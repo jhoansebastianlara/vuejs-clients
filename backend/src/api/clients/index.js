@@ -78,9 +78,6 @@ router.put('/:id', (req, res) => {
     id: req.params.id
   }
 
-  console.log('clientData')
-  console.log(clientData)
-
   // Validate fields required
   let allFieldsOK = clientData.id && (clientData.name || clientData.email || clientData.phone)
 

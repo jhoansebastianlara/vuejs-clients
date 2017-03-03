@@ -43,7 +43,7 @@ var Client = {
   * @param callback(err, clients)
   */
   find: (query, callback) => {
-    if (!query) {
+    if (!callback) {
       callback = query
       query = {}
     }
@@ -81,6 +81,16 @@ var Client = {
       queryParams.where.phone = {
         $like: '%' + query.phone + '%'
       }
+    }
+
+    if (query.search) {
+      queryParams.where.$or = [{
+          name: {$like: '%' + query.search + '%'}
+        }, {
+          email: {$like: '%' + query.search + '%'}
+        }, {
+          phone: {$like: '%' + query.search + '%'}
+      }]
     }
 
     models.Client.findAll(queryParams).then((clients) => {
@@ -143,8 +153,8 @@ var Client = {
       update.phone = clientData.phone
     }
 
+    // Verify if the client exists
     models.Client.findById(clientData.id).then((client) => {
-      // Send to update info in database
       if (client) {
         // Client exists, it can be updated
         models.Client.update(update, {
@@ -152,13 +162,8 @@ var Client = {
             id: clientData.id
           }
         }).then((updated) => {
-          console.log('resp updated:')
-          console.log(updated)
-          console.log('providers?')
-          console.log(clientData.providers)
           // update providers, if necessary
           if (clientData.providers && clientData.providers.length) {
-            console.log('update providers please')
             // Find providers to assign them to the client
             models.Provider.findAll({
               where: {
@@ -167,14 +172,12 @@ var Client = {
             }).then((providers) => {
               client.setProviders(providers).then((resp) => {
                 // Saved providers
-                console.log('providers updated')
                 callback(null, true)
               })
             }).catch((err) => {
               callback(err)
             })
           } else {
-            console.log('no providers to update')
             callback(null, true)
           }
         }).catch((err) => {
@@ -186,32 +189,6 @@ var Client = {
     }).catch((err) => {
       callback(err)
     })
-
-
-
-
-
-    // first of all, Check if the client exists
-    // Client.findById(clientData.id, (err, data) => {
-    //   if (err) {
-    //     return callback(err)
-    //   }
-    //
-    //   if (data.client) {
-    //     // Client exists, it can be updated
-    //     models.Client.update(update, {
-    //       where: {
-    //         id: clientData.id
-    //       }
-    //     }).then((updated) => {
-    //       callback(null, true)
-    //     }).catch((err) => {
-    //       callback(err)
-    //     })
-    //   } else {
-    //     callback(null, {notFound: true})
-    //   }
-    // })
   },
 
   /**
@@ -254,12 +231,8 @@ var Client = {
   */
   delete: (id, callback) => {
     // first of all, Check if the client exists
-    Client.findById(id, (err, data) => {
-      if (err) {
-        return callback(err)
-      }
-
-      if (data.client) {
+    models.Client.findById(id).then((client) => {
+      if (client) {
         // Client exists, it can be removed
         models.Client.destroy({
           where: {
@@ -273,6 +246,8 @@ var Client = {
       } else {
         callback(null, {notFound: true})
       }
+    }).catch((err) => {
+      callback(err)
     })
   }
 }

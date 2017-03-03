@@ -54,3 +54,16 @@ input {
 .error-message {
   color: color(danger)
 }
+
+// flexbox
+.flex-center-end {
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.flex-center-start {
+  padding: 0;
+  display: flex;
+  justify-content: flex-start;
+}

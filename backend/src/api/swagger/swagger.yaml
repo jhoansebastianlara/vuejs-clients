@@ -98,7 +98,7 @@ paths:
 
   /clients/{id}:
     put:
-      summary: Update info for a client.
+      summary: Update the info for a client.
       description: |
         Updates a client. If you want to relate it with providers, send ids
         in an array `providers` or empty array `[]` for no relationships.
@@ -198,7 +198,7 @@ paths:
 
   /providers/{id}:
     put:
-      summary: Update info for a provider.
+      summary: Update the info for a provider.
       consumes:
         - application/x-www-form-urlencoded
         - application/json

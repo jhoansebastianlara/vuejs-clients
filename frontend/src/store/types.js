@@ -21,6 +21,7 @@ export const MUTATE_DELETE_PROVIDER = 'provider/MUTATE_DELETE_PROVIDER'
 
 // Actions
 export const SET_CLIENTS_AND_PROVIDERS = 'provider/SET_CLIENTS_AND_PROVIDERS'
+export const FILTER_CLIENTS = 'provider/FILTER_CLIENTS'
 
 export const ADD_CLIENT = 'provider/ADD_CLIENT'
 export const UPDATE_CLIENT = 'provider/UPDATE_CLIENT'

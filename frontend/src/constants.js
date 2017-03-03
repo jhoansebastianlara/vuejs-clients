@@ -3,6 +3,10 @@ export const ENDPOINTS = {
   CLIENTS: {
     ROOT: 'clients',
     DETAIL: 'clients/:id',
+  },
+  PROVIDERS: {
+    ROOT: 'providers',
+    DETAIL: 'providers/:id',
   }
 }
 

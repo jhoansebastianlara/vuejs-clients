@@ -54,12 +54,22 @@
             id: this.providerId,
             name: this.providerName
           }
-          this.updateProvider(updatedProvider).then((data) => {
+          this.updateProvider(updatedProvider).then((response) => {
+            if (!response.success) {
+              alert('Error, the provider couldn\'t be updated')
+            }
             this.loading = false
+          }, (responseError) => {
+            alert('Error, the client couldn\'t be updated!')
           })
         } else {
-          this.addProvider(this.providerName).then((data) => {
+          this.addProvider({name: this.providerName}).then((response) => {
+            if (!response.success) {
+              alert('Error, the provider couldn\'t be added')
+            }
             this.loading = false
+          }, (responseError) => {
+            alert('Error, the client couldn\'t be added!')
           })
         }
 

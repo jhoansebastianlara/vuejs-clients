@@ -5,7 +5,7 @@
         <h1>Providers</h1>
       </div>
       <div class="col-xs-12 col-sm-offset-2 col-sm-7">
-        <input type="text" v-model="filterText">
+        <input type="text" v-model.trim="filterText" placeholder="Search">
       </div>
     </div>
     <div class="table-content row">

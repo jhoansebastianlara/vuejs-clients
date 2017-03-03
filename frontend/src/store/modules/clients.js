@@ -32,7 +32,7 @@ const mutations = {
 
   [types.MUTATE_DELETE_CLIENT] (state, clientId) {
     let indexClient = state.clients.findIndex(element => element.id == clientId)
-    console.log('remove: ', clientId, indexClient)
+
     // it checks if the client was found
     if (indexClient > -1) {
       state.clients.splice(indexClient, 1)
@@ -75,12 +75,44 @@ const actions = {
     })
   },
 
+  [types.FILTER_CLIENTS]: ({commit}, search) => {
+    return new Promise((resolve, reject) => {
+      var searchUrl = '?search=' + search
+      // GET /clients
+      Vue.http.get(ENDPOINTS.CLIENTS.ROOT + searchUrl)
+        .then(response => {
+          // validate the response status code is ok
+          if (response.status == HTTP_STATUS.OK) {
+            let data = response.body
+
+            resolve({
+              success: true,
+              data: {
+                clients: data.clients
+              }
+            })
+          } else {
+            resolve({
+              success: false,
+              error: ERROR_CODES.INTERNAL_ERROR
+            })
+          }
+        }, response => {
+          // error callback
+          reject({
+            success: false,
+            error: ERROR_CODES.INTERNAL_ERROR
+          })
+        })
+    })
+  },
+
   [types.ADD_CLIENT]: ({commit, state}, client) => {
     return new Promise((resolve, reject) => {
       // POST /clients
       Vue.http.post(ENDPOINTS.CLIENTS.ROOT, client)
         .then(response => {
-          console.log('response done')
+
           let newClient = response.body
           // validate if the resource was created
           if (response.status == HTTP_STATUS.CREATED && newClient.id) {

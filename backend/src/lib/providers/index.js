@@ -43,14 +43,24 @@ module.exports = {
 
   // Function that updates a provider
   update: (providerData, callback) => {
-    models.Provider.update({
-      name: providerData.name
-    }, {
-      where: {
-        id: providerData.id
+    // Verify if the provider exists
+    models.Provider.findById(providerData.id).then((provider) => {
+      if (provider) {
+        // Provider exists, it can be updated
+        models.Provider.update({
+          name: providerData.name
+        }, {
+          where: {
+            id: providerData.id
+          }
+        }).then((updated) => {
+          callback(null, true)
+        }).catch((err) => {
+          callback(err)
+        })
+      } else {
+        callback(null, {notFound: true})
       }
-    }).then((updated) => {
-      callback(null, updated)
     }).catch((err) => {
       callback(err)
     })
@@ -58,12 +68,22 @@ module.exports = {
 
   // Function that deletes a provider
   delete: (id, callback) => {
-    models.Provider.destroy({
-      where: {
-        id: id
+    // first of all, Check if the provider exists
+    models.Provider.findById(id).then((provider) => {
+      if (provider) {
+        // Provider exists, it can be removed
+        models.Provider.destroy({
+          where: {
+            id: id
+          }
+        }).then((provider) => {
+          callback(null, true)
+        }).catch((err) => {
+          callback(err)
+        })
+      } else {
+        callback(null, {notFound: true})
       }
-    }).then((provider) => {
-      callback(null, provider)
     }).catch((err) => {
       callback(err)
     })

@@ -35,7 +35,7 @@ router.post('/', (req, res) => {
 })
 
 /**
-* pdate info for a provider
+* Update the info for a provider
 */
 router.put('/:id', (req, res) => {
   let body = req.body
@@ -46,15 +46,24 @@ router.put('/:id', (req, res) => {
   }
 
   // Validate fields required
-  if (providerData.name) {
-    Provider.update(providerData, (err, updated) => {
+  if (providerData.name && providerData.id) {
+    Provider.update(providerData, (err, data) => {
       if (err) {
+        console.log('error update: ')
+        console.log(err)
         return res.status(constants.HTTP_STATUS.INTERNAL_ERROR).json({
           error: constants.ERROR_CODES.INTERNAL_ERROR
         })
       }
 
-      res.json(updated)
+      // check if the client was found
+      if (data.notFound) {
+        return res.status(constants.HTTP_STATUS.NOT_FOUND).json({
+          error: constants.ERROR_CODES.NOT_FOUND
+        })
+      }
+
+      res.json(data)
     })
   } else {
     res.status(constants.HTTP_STATUS.BAD_REQUEST).json({
@@ -67,14 +76,22 @@ router.put('/:id', (req, res) => {
 * Delete a provider
 */
 router.delete('/:id', (req, res) => {
-  Provider.delete(req.params.id, (err, deleted) => {
+  Provider.delete(req.params.id, (err, data) => {
+    console.log(err)
+    console.log(data)
     if (err) {
       return res.status(constants.HTTP_STATUS.INTERNAL_ERROR).json({
         error: constants.ERROR_CODES.INTERNAL_ERROR
       })
     }
 
-    res.json(deleted)
+    if (data.notFound) {
+      return res.status(constants.HTTP_STATUS.NOT_FOUND).json({
+        error: constants.ERROR_CODES.NOT_FOUND
+      })
+    }
+
+    res.json(data)
   })
 })
 

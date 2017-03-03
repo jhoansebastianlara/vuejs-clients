@@ -58,7 +58,7 @@
       },
       onDeleteProvider(provider) {
         if (confirm('Are you sure you want to delete this provider?')) {
-          this.deleteProvider(provider)
+          this.deleteProvider(provider.id)
         }
       }
     },
