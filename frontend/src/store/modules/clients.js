@@ -64,16 +64,6 @@ let getClientSearchUrlFormatted = (options) => {
 const actions = {
   [types.SET_CLIENTS_AND_PROVIDERS]: ({commit}, options) => {
     let optionsSearchUrl = getClientSearchUrlFormatted(options)
-
-    // if (sortData) {
-    //     if (sortData.sortField) {
-    //       searchUrl += '?sortField=' + sortData.sortField
-    //     }
-    //     if (sortData.sortType) {
-    //       searchUrl += searchUrl == '' ? '?' : '&'
-    //       searchUrl += 'sortType=' + sortData.sortType
-    //     }
-    // }
     return new Promise((resolve, reject) => {
       // GET /clients
       Vue.http.get(ENDPOINTS.CLIENTS.ROOT + optionsSearchUrl)
