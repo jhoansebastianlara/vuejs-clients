@@ -40,11 +40,43 @@ const mutations = {
   }
 }
 
+// returns an url based on options paramenter
+let getClientSearchUrlFormatted = (options) => {
+  let formaterUrl = ''
+
+  if (options) {
+      if (options.search) {
+        formaterUrl += '?search=' + options.search
+      }
+      if (options.sortField) {
+        formaterUrl += formaterUrl == '' ? '?' : '&'
+        formaterUrl += 'sortField=' + options.sortField
+      }
+      if (options.sortType) {
+        formaterUrl += formaterUrl == '' ? '?' : '&'
+        formaterUrl += 'sortType=' + options.sortType
+      }
+  }
+
+  return formaterUrl
+}
+
 const actions = {
-  [types.SET_CLIENTS_AND_PROVIDERS]: ({commit}) => {
+  [types.SET_CLIENTS_AND_PROVIDERS]: ({commit}, options) => {
+    let optionsSearchUrl = getClientSearchUrlFormatted(options)
+
+    // if (sortData) {
+    //     if (sortData.sortField) {
+    //       searchUrl += '?sortField=' + sortData.sortField
+    //     }
+    //     if (sortData.sortType) {
+    //       searchUrl += searchUrl == '' ? '?' : '&'
+    //       searchUrl += 'sortType=' + sortData.sortType
+    //     }
+    // }
     return new Promise((resolve, reject) => {
       // GET /clients
-      Vue.http.get(ENDPOINTS.CLIENTS.ROOT)
+      Vue.http.get(ENDPOINTS.CLIENTS.ROOT + optionsSearchUrl)
         .then(response => {
           // validate the response status code is ok
           if (response.status == HTTP_STATUS.OK) {
@@ -75,11 +107,11 @@ const actions = {
     })
   },
 
-  [types.FILTER_CLIENTS]: ({commit}, search) => {
+  [types.FILTER_CLIENTS]: ({commit}, options) => {
     return new Promise((resolve, reject) => {
-      var searchUrl = '?search=' + search
+      let optionsSearchUrl = getClientSearchUrlFormatted(options)
       // GET /clients
-      Vue.http.get(ENDPOINTS.CLIENTS.ROOT + searchUrl)
+      Vue.http.get(ENDPOINTS.CLIENTS.ROOT + optionsSearchUrl)
         .then(response => {
           // validate the response status code is ok
           if (response.status == HTTP_STATUS.OK) {

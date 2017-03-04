@@ -16,7 +16,15 @@
         <thead>
           <tr>
             <th v-for="prop in tableProps"
-              :style="{width: prop.width + '%'}">{{ prop.name }}</th>
+              :style="{width: prop.width + '%'}"
+              :class="{ 'clickable': prop.sortField != null }"
+              @click="sortByField(prop.sortField)">
+                {{ prop.name }}
+                <template v-if="currentSortField && currentSortField == prop.sortField">
+                  <span v-if="currentSortType == 'DESC'">&uarr;</span>
+                  <span v-else>&darr;</span>
+                </template>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -58,17 +66,20 @@
       return {
         filterText: '',
         tableProps: [
-          { name: 'Name', width: 25 },
-          { name: 'Email', width: 25 },
-          { name: 'Phone', width: 15 },
-          { name: 'Providers', width: 25 },
-          { name: 'Options', width: 10 }
+          { name: 'Name', width: 25, sortField: 'name' },
+          { name: 'Email', width: 25, sortField: 'email' },
+          { name: 'Phone', width: 15, sortField: 'phone' },
+          { name: 'Providers', width: 25, sortField: null },
+          { name: 'Options', width: 10, sortField: null }
         ],
         showClientFormModal: false,
         // used when a client is going to edit
         clientEdit: {},
         filteredClients: [],
-        loading: false
+        loading: false,
+        currentSortField: null,
+        // by default the API returns the clients order DESC
+        currentSortType: 'DESC',
       }
     },
     watch: {
@@ -85,6 +96,7 @@
     methods:{
       ...mapActions({
         filterClients: types.FILTER_CLIENTS,
+        getClients: types.SET_CLIENTS_AND_PROVIDERS
       }),
       editClient(client) {
         this.clientEdit = client
@@ -100,7 +112,13 @@
       // search method, waiting until the user has completely
       // finished typing before making the request.
       search: _.debounce(function () {
-          this.filterClients(this.filterText).then(response => {
+          let optionsSearch = {
+            search: this.filterText,
+            sortField: this.currentSortField,
+            sortType: this.currentSortType
+          }
+
+          this.filterClients(optionsSearch).then(response => {
             if (response.success && response.data) {
               this.filteredClients = response.data.clients ? response.data.clients : []
             }
@@ -112,7 +130,16 @@
         // This is the number of milliseconds we wait for the
         // user to stop typing.
         500
-      )
+      ),
+      sortByField(sortField) {
+        if (sortField) {
+          // check if we need to switch the order type. ASC | DESC
+          this.currentSortType = this.currentSortType == 'ASC' ? 'DESC' : 'ASC'
+          this.currentSortField = sortField
+          // Obtain sorted clients
+          this.getClients({sortField: sortField, sortType: this.currentSortType})
+        }
+      }
     },
     computed: {
       clients() {
@@ -176,5 +203,14 @@
       }
     }
   }
+
+  .arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+
+  border-bottom: 5px solid black;
+}
 
 </style>

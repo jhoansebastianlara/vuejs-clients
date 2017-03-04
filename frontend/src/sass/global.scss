@@ -60,7 +60,19 @@ input {
   color: white
 }
 
+.clickable {
+  text-decoration: underline;
+  color: color(primary)
+}
+
 // flexbox
+.flex-center-center {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .flex-center-end {
   padding: 0;
   display: flex;
