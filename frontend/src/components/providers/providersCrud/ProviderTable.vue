@@ -45,7 +45,6 @@
     },
     watch: {
       providersIdsSelected(newProvidersSelected) {
-        console.log(newProvidersSelected)
         eventBus.$emit('newSelectedProviders', newProvidersSelected)
       }
     },

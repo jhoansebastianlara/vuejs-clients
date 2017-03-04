@@ -22,7 +22,6 @@ module.exports = {
 
       callback(null, response)
     }).catch((err) => {
-      console.log(err)
       callback(err)
     })
   },
@@ -36,7 +35,6 @@ module.exports = {
 
       callback(null, response)
     }).catch((err) => {
-      console.log(err)
       callback(err)
     })
   },

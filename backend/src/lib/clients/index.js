@@ -6,7 +6,7 @@ var Client = {
   /**
   * Function that creates a client
   * @param clientData with name, email and phone of client. Optional array of
-  *                 providers ids to assign.
+  * providers ids to assign.
   * @param callback(err, createdClient)
   */
   create: (clientData, callback) => {
@@ -48,6 +48,16 @@ var Client = {
       query = {}
     }
 
+    if (query.sortField) {
+      // Verify if is a valid sort field
+      let index = ['id', 'name', 'email'].findIndex(item => {return item == query.sortField})
+
+      if (index == -1) {
+        // sortField unknow, it's ignored
+        query.sortField = null
+      }
+    }
+
     // Variable to define params for querying
     let queryParams = {
       // Populate belongsToMany relationship with provider_id only
@@ -83,6 +93,7 @@ var Client = {
       }
     }
 
+    // free search
     if (query.search) {
       queryParams.where.$or = [{
           name: {$like: '%' + query.search + '%'}
@@ -98,15 +109,13 @@ var Client = {
         clients: JSON.parse(JSON.stringify(clients))
       }
 
-      models.Provider.findAll().then((providers) => {
+      models.Provider.findAll({order:[['id', 'DESC']]}).then((providers) => {
         response.providers = JSON.parse(JSON.stringify(providers))
         callback(null, response)
       }).catch((err) => {
-        console.log(err)
         callback(err)
       })
     }).catch((err) => {
-      console.log(err)
       callback(err)
     })
   },
@@ -130,7 +139,6 @@ var Client = {
 
       callback(null, response)
     }).catch((err) => {
-      console.log(err)
       callback(err)
     })
   },
@@ -185,39 +193,6 @@ var Client = {
         })
       } else {
         callback(null, {notFound: true})
-      }
-    }).catch((err) => {
-      callback(err)
-    })
-  },
-
-  /**
-  * Function that updates providers for a client
-  * @param clientData with client identificator to update, and info to set:
-  *           provider ids array (providers).
-  * @param callback(err, client)
-  */
-  updateProviders: (clientData, callback) => {
-    // Find client for updating
-    models.Client.findById(clientData.id).then((client) => {
-      // Send to update info in database
-      if (client) {
-        // Find providers to assign on client
-        models.Provider.findAll({
-          where: {
-            id: { $in: clientData.providers }
-          }
-        }).then((providers) => {
-          client.setProviders(providers).then(() => {
-            // Saved providers
-            callback(null, [1])
-          })
-        })
-      } else {
-        callback(null, {
-          code: constants.HTTP_STATUS.NOT_FOUND,
-          desc: 'Client not found'
-        })
       }
     }).catch((err) => {
       callback(err)

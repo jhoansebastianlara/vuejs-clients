@@ -14,7 +14,7 @@ produces:
 paths:
   /clients:
     get:
-      summary: Clients and providers
+      summary: Returns all the clients and providers
       description: |
         The Clients endpoint returns information about the stored clients and
         their relationships with providers.
@@ -39,9 +39,14 @@ paths:
           description: Phone or part of phone to search on clients' phone field.
           required: false
           type: string
+        - name: search
+          in: query
+          description: Used for search clients by name, email or phone
+          required: false
+          type: string
         - name: sortField
           in: query
-          description: Field name to order clients list when querying.
+          description: Field name to order clients list when querying (Should be `name`, `email` or `phone` otherwise it will be ignored).
           required: false
           type: string
         - name: sortType
@@ -95,7 +100,6 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-
   /clients/{id}:
     put:
       summary: Update the info for a client.
@@ -129,7 +133,7 @@ paths:
         - Clients
       responses:
         200:
-          description: Object updated.
+          description: success
         default:
           description: Unexpected error
           schema:
@@ -146,7 +150,7 @@ paths:
         - Clients
       responses:
         200:
-          description: Object deleted.
+          description: Success.
         default:
           description: Unexpected error
           schema:
@@ -163,14 +167,13 @@ paths:
         - Clients
       responses:
         200:
-          description: Object deleted.
+          description: Object with client data.
           schema:
             $ref: '#/definitions/Client'
         default:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-
   /providers:
     post:
       summary: Save a provider.
@@ -178,11 +181,11 @@ paths:
         - application/x-www-form-urlencoded
         - application/json
       parameters:
-        - name: name
+        - name: provider
           in: body
-          description: The provider name you want to save
+          description: The provider JSON you want to post
           schema:
-            type: string
+            $ref: '#/definitions/Provider'
           required: true
       tags:
         - Providers
@@ -208,11 +211,11 @@ paths:
           description: Provider ID to update
           required: true
           type: string
-        - name: name
+        - name: provider
           in: body
-          description: The provider name you want to update
+          description: The provider JSON you want to post
           schema:
-            type: string
+            $ref: '#/definitions/Provider'
           required: true
       tags:
         - Providers
@@ -223,6 +226,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+
     delete:
       summary: Delete a provider
       parameters:
@@ -256,9 +260,6 @@ definitions:
   Provider:
     type: object
     properties:
-      id:
-        type: integer
-        description: Unique identifier for the provider.
       name:
         type: string
         description: Name of the provider.

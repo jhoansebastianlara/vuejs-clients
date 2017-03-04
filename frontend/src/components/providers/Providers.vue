@@ -48,14 +48,6 @@
         })
       }
     },
-    created(){
-      console.log('created')
-      let filtered = this.providers.filter(element => {
-        console.log(element.name)
-        return element.name && element.name.match('Main')
-      })
-      console.log(filtered)
-    },
     components: {
       rowProvider: Provider
     }

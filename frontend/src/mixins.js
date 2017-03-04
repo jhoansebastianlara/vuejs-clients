@@ -1,3 +1,4 @@
+// Used for reusable functionalities for Vue components
 export const appMixin = {
     methods: {
         validateEmail(email) {

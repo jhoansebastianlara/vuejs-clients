@@ -5,7 +5,7 @@
         <h1>Clients</h1>
       </div>
       <div class="col-xs-5 col-sm-7 flex-center-start">
-        <input type="text" v-model.trim="filterText" placeholder="Search">
+        <input type="text" v-model.trim="filterText" placeholder="Search by: Name, email or phone">
       </div>
       <div class="col-xs-4 col-sm-3 flex-center-end">
         <button type="button" @click="newClient">New Client</button>
@@ -20,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-if="loading">
+          <tr v-if="loading" class="info-container">
             <td :colspan="tableProps.length">Searching...</td>
           </tr>
           <template v-if="filterText == ''">
@@ -73,9 +73,12 @@
     },
     watch: {
       // whenever question changes, this function will run
-      filterText: function (newQuestion) {
+      filterText (newQuestion) {
         // Waiting for the user to stop typing...
         this.loading = true
+        this.search()
+      },
+      clients(newClients) {
         this.search()
       }
     },
@@ -98,13 +101,11 @@
       // finished typing before making the request.
       search: _.debounce(function () {
           this.filterClients(this.filterText).then(response => {
-            console.log(response)
             if (response.success && response.data) {
               this.filteredClients = response.data.clients ? response.data.clients : []
             }
             this.loading = false
           }, errorResponse => {
-            console.log(errorResponse)
             this.loading = false
           })
         },

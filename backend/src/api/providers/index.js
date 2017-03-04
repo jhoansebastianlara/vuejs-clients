@@ -11,7 +11,7 @@ const router = express.Router()
 */
 router.post('/', (req, res) => {
   let body = req.body
-
+  console.log(req)
   let providerData = {
     name: body.name
   }
@@ -49,8 +49,6 @@ router.put('/:id', (req, res) => {
   if (providerData.name && providerData.id) {
     Provider.update(providerData, (err, data) => {
       if (err) {
-        console.log('error update: ')
-        console.log(err)
         return res.status(constants.HTTP_STATUS.INTERNAL_ERROR).json({
           error: constants.ERROR_CODES.INTERNAL_ERROR
         })
@@ -77,8 +75,6 @@ router.put('/:id', (req, res) => {
 */
 router.delete('/:id', (req, res) => {
   Provider.delete(req.params.id, (err, data) => {
-    console.log(err)
-    console.log(data)
     if (err) {
       return res.status(constants.HTTP_STATUS.INTERNAL_ERROR).json({
         error: constants.ERROR_CODES.INTERNAL_ERROR

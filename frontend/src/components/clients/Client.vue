@@ -44,7 +44,6 @@
         deleteClient: types.DELETE_CLIENT
       }),
       clientDeleted() {
-        console.log('clientDeleted')
         if (confirm('Are you sure you want to delete this client?')) {
           this.deleteClient(this.client.id)
             .then(response => {

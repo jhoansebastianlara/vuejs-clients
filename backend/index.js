@@ -1,4 +1,4 @@
-const constants = require('src/shared/constants')
+const config = require('src/config/config')
 const http = require('http')
 const express = require('express')
 const cors = require('cors')
@@ -10,7 +10,7 @@ const app = express()
 // server creation with basic express configurations
 const server = http.createServer(app)
 // sets port to listen to requests
-const port = process.env.PORT || constants.PORT
+const port = process.env.PORT || config.port
 
 // API supports cross-domain-requests
 app.use(cors())

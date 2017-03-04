@@ -154,10 +154,8 @@
       ProvidersCrud
     },
     mounted() {
-      console.log('created')
       // it checks if exist a client for edit
       if (this.client && this.client.id) {
-        console.log('edit client', this.client)
         this.clientId = this.client.id
         this.name = this.client.name
         this.email = this.client.email
@@ -178,7 +176,6 @@
       // listen when a provider was toggled and update the checked providers
       eventBus.$on('providerToggle', (provider, checked) => {
         let indexProvider = this.providers.findIndex(element => element.id == provider.id)
-        console.log(provider.name + ' ' + checked + ' ' + indexProvider)
         // it checks if the provider was found and is unchecked (it means remove it)
         if (indexProvider > -1 && !checked) {
           this.providers.splice(indexProvider, 1)

@@ -32,16 +32,13 @@ router.get('/', (req, res) => {
 */
 router.post('/', (req, res) => {
   let body = req.body
-  let providers = body['providers[]']
-  console.log(body)
+  let providers = body['providers[]'] || body['providers']
   let clientData = {
     name: body.name,
     email: body.email,
     phone: body.phone,
     providers: providers && Array.isArray(providers) ? providers : [providers],
   }
-  console.log('clientData:')
-  console.log(clientData)
 
   // Validate fields required
   let allFieldsOK = clientData.name && clientData.email && clientData.phone
@@ -68,7 +65,7 @@ router.post('/', (req, res) => {
 */
 router.put('/:id', (req, res) => {
   let body = req.body
-  let providers = body['providers[]']
+  let providers = body['providers[]'] || body['providers']
 
   let clientData = {
     name: body.name,
