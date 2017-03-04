@@ -8,8 +8,8 @@
                 :value="provider.id"
                 v-model="providersIdsSelected">
             </div>
-            <div class="col-xs-9 provider-name truncate-text no-padding">
-              {{ provider.name }}
+            <div class="col-xs-9 provider-name no-padding flex-center">
+              <span class="truncate-text small-label">{{ provider.name }}</span>
             </div>
             <div class="col-xs-2 no-padding icons">
               <img src="../../../assets/icons/edit.png"
@@ -70,4 +70,7 @@
 </script>
 
 <style lang="css">
+  .small-label {
+    font-size: .8rem;
+  }
 </style>

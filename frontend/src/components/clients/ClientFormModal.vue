@@ -9,7 +9,7 @@
           <div class="modal-body">
             <form>
               <div class="row">
-                <div class="col-xs-offset-1 col-xs-10">
+                <div class="col-xs-offset-2 col-xs-8">
                   <div class="row">
                     <div class="col-xs-3">
                       <label for="name">Name:</label>
@@ -240,6 +240,11 @@
 
   .modal-body {
     margin: 1em 0;
+
+    label {
+      float: right;
+      font-weight: bold;
+    }
 
     .row:first-child {
       align-items: center;
