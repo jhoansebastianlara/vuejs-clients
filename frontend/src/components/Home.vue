@@ -5,7 +5,7 @@
     <hr>
     <h2>Summary</h2>
     <h5>Total clients: {{ clients.length }}</h5>
-    <h5>Total clients: {{ providers.length }}</h5>
+    <h5>Total providers: {{ providers.length }}</h5>
   </div>
 </template>
 
