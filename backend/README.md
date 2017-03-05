@@ -21,6 +21,8 @@ Backend used for full-stack JS developer test.
   port: 3000
   ```
 
+## API documentation
+I used swagger to document the API. See the documentation [here](https://github.com/jhoansebastianlara/vuejs-clients/blob/master/backend/src/api/swagger/swagger.yaml)
 
 ## Install
 Be sure that you are in `/backend` folder.
