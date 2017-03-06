@@ -22,7 +22,7 @@ Backend used for full-stack JS developer test.
   ```
 
 ## API documentation
-I used swagger to document the API. See the documentation [here](https://github.com/jhoansebastianlara/vuejs-clients/blob/master/backend/src/api/swagger/swagger.yaml). (You can test it: [here](http://138.68.9.12:3001)
+I used swagger to document the API. You can see and test it: [here](http://138.68.9.12:3001)
 
 ## Install
 Be sure that you are in `/backend` folder.
