@@ -76,7 +76,9 @@
         this.providerName = ''
         this.providerId = null
 
-        this.$refs.providerNameInput.focus()
+        if (this.$refs.providerNameInput && this.$refs.providerNameInput.focus) {
+          this.$refs.providerNameInput.focus()
+        }
       }
     },
     created() {
@@ -84,7 +86,9 @@
         if (providerUpdate && providerUpdate.id && providerUpdate.name) {
           this.providerId = providerUpdate.id
           this.providerName = providerUpdate.name
-          this.$refs.providerNameInput.focus()
+          if (this.$refs.providerNameInput && this.$refs.providerNameInput.focus) {
+            this.$refs.providerNameInput.focus()
+          }
         }
       })
     }
