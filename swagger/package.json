@@ -1,0 +1,20 @@
+{
+  "name": "petstore-on-heroku",
+  "version": "1.0.0",
+  "description": "**This example has a working backend hosted in Heroku**  You can try all HTTP operation described in this Swagger spec.  Find source code of this API [here](https://github.com/mohsen1/petstore-api) ",
+  "main": "index.js",
+  "scripts": {
+	"prestart": "npm install",
+	"start": "node index.js"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "swagger-tools": "0.10.1"
+  }
+}
